@@ -37,12 +37,13 @@ class BottleneckBlock(gluon.nn.Block):
         self.relu1 = gluon.nn.Activation(activation='relu')
         self.conv2 = gluon.nn.Conv2D(channels= channels_output, kernel_size=(1,1))
         self.bn2 = gluon.nn.BatchNorm(axis=1, center=True, scale=True)
+        self.relu_end = gluon.nn.Activation(activation='relu')
 
     def forward(self, x):
         f = self.relu0(self.bn0(self.conv0(x)))
         f = self.relu1(self.bn1(self.conv1(f)))
         f = self.bn2(self.conv2(f))
-        return f + x
+        return self.relu_end(f + x)
 
 # build network
 net = gluon.nn.Sequential()
